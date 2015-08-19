@@ -1,4 +1,5 @@
 @font-face{ font-family: "RobotoCondensed-Light"; src: url("RobotoCondensed-Light.ttf"); }
 * { margin:0 0 0 0; padding:0 0 0 0; font-family:"RobotoCondensed-Light" !important; font-size: 12pt !important; }
-a:link { text-decoration: none }
-a:visited { color: #000 }
+a:link { text-decoration: none; }
+a:visited { color: #000; }
+a:hover { color: #f00; }
