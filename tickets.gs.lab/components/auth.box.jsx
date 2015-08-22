@@ -3,12 +3,10 @@ var AuthBox = React.createClass({
 	mixins: [React.addons.LinkedStateMixin],
 
 	getInitialState: function () {
-		return { username: null, password: null }
+		return { username: 'admin', password: 'admin' }
 	},
 
 	render: function () {
-
-		// console.log('render from auth')
 
 		var msg = null;
 
