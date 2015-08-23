@@ -18,6 +18,10 @@ var App = React.createClass({
 		this.setState({ dateSelected: d });
 	},
 
+	timeSelect: function () {
+		console.log('aaa')
+	},
+
 	logout: function () {
 		this.setState({ granted: null, profile: null });
 	},
@@ -37,6 +41,7 @@ var App = React.createClass({
 						<div onClick={this.logout}>{this.state.profile.fullName}</div>
 						<MovieDatePicker current={this.state.dateSelected} onDateSelect={this.dateSelect} />
 					</div>
+					<MovieTimes current={this.state.dateSelected} onTimeSelect={this.timeSelect} />
 				</div>
 			);
 		}
