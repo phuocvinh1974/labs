@@ -15,6 +15,7 @@
 		<script src="components/auth.box.jsx" type="text/jsx"></script>
 		<script src="components/movie.datepicker.jsx" type="text/jsx"></script>
 		<script src="components/movie.times.jsx" type="text/jsx"></script>
+		<script src="components/movie.tickets.jsx" type="text/jsx"></script>
 
 		<script type="text/jsx">
             React.render(<App />, document.body);

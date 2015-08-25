@@ -19,6 +19,7 @@ var MovieDatePicker = React.createClass({
                     var t = d.toDMString() === new Date().toDMString() ? "TODAY" : d.toDMString();
 
                     a.push({ date: d.toISOString(), label: t });
+
 				}
 
 				this.setState({ days: a });
@@ -48,13 +49,13 @@ var MovieDatePicker = React.createClass({
 		if ( this.state.days.length ) {
 
 			return (
-				<div className="movie-datepicker">
+				<div className="datepicker">
 				{
 					this.state.days.map( function (v) {
 						return (
-							<div onClick={this.handleClick.bind(this, v.date)} data-isselected={v.date===this.props.current ? true : false}>
-								<span>{new Date(v.date).toDayNameString()}</span>
-								<span><i className="fa fa-angle-right"></i></span>
+							<div onClick={this.handleClick.bind(this, v.date)} data-isselected={v.date===this.props.current ? true : false} style={{cursor:'pointer'}}>
+								<span style={{letterSpacing:3}}>{new Date(v.date).toDayNameString()}</span>
+								<span style={{margin:'0 6px 0 6px'}}><i className="fa fa-circle" style={{fontSize:'4px !important'}}></i></span>
 								<span>{v.label}</span>
 							</div>
 						);
