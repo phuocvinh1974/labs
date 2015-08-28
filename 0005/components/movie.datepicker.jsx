@@ -65,6 +65,6 @@ var MovieDatePicker = React.createClass({
 			);
 
 		} else
-			return (<div>movie.datepicker | loading | error | nothing</div>); 
+			return (<div>nothing...</div>); 
 	}
 });
