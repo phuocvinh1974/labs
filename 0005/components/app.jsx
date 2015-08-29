@@ -64,7 +64,7 @@ var App = React.createClass({
 			return (
 				<div className="App flex f-midcen">
 					<div style={{textAlign:'right',marginRight:24}}>
-						<div style={{fontSize:'18pt !important',letterSpacing:2,color:'#FFF',backgroundColor:'#2196F3'}}>MOVIE SHOWTIMES</div>
+						<div style={{fontSize:'18pt !important',letterSpacing:2,color:'#FFF',backgroundColor:'#F06292'}}>MOVIE SHOWTIMES</div>
 						<div><i className="fa fa-user" style={{fontSize:'10pt !important',marginRight:6}}></i>{this.state.profile.fullName} | <span onClick={this.logout} style={{cursor:'pointer'}}>Logout</span></div>
 						<div style={{marginBottom:12}}></div>
 						<MovieDatePicker current={this.state.dateSelected} onDateSelect={this.dateSelect} />

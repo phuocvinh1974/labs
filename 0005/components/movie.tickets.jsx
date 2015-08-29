@@ -1,15 +1,54 @@
-var MovieTickets = React.createClass({
+var MovieTickets = React.createClass ({
+
+	mixins: [React.addons.LinkedStateMixin],
 
 	resSeatsPaid: function (s) {
 		this.state.seatsPaid = s;
 	},
 
-	onSeatSelect: function (n) {
+	getPrice: function (t) {
+
+		var day = new Date(this.props.showtime.date).getDay(),
+		start = parseInt(this.props.showtime.start),
+		format = this.props.showtime.format,
+		at = start < 600 ? 'start' : start > 600 && start < 1020 ? 'mid' : 'end',
+		price = 0;
+
+		if (t==='N') {
+			if (format==='3D')
+				price = parseInt(this.props.pricing[day][at]['3D-N']);
+			else
+				price = parseInt(this.props.pricing[day][at]['adult']);
+		} else {
+			if(format==='3D')
+				price = parseInt(this.props.pricing[day][at]['3D-P']);
+			else
+				price = parseInt(this.props.pricing[day][at]['2D-P']);
+		}
+		
+		// if ( this.props.events!==undefined )
+		// 	price = parseInt(this.props.events.samePrice);
+
+		return price;
+	},
+
+	onCash: function (e) {
+		var v = event.target.value;
+		this.setState({ cash: v, charge: v-this.state.paymentTotal });
+	},
+
+	onSeatSelect: function (n,t) { // n = seatID , t = type = VIP / NORMAL
 
 		if (!this.state.seatsSelected[n])
+		{
 			this.state.seatsSelected[n] = true;
+			this.setState({ paymentTotal: this.state.paymentTotal + this.getPrice (t) })
+		}
 		else
+		{
 			delete this.state.seatsSelected[n];
+			this.setState({ paymentTotal: this.state.paymentTotal - this.getPrice (t) })
+		}
 	},
 
 	seatsConfirm: function () {
@@ -25,18 +64,23 @@ var MovieTickets = React.createClass({
 			data: { post: data },
 			success: function (res) {
 
-				this.setState({ layoutReload: true });
+				this.replaceState (this.getInitialState());
+
+				this.setState({ _reloadLayout: new Date().getTime() });
 				
 			}.bind(this)
 		});
 	},
 
 	closeLayout: function () {
-		this.props.onClose ()
+
+		this.replaceState (this.getInitialState());
+
+		this.props.onClose ();
 	},
 
 	getInitialState: function () {
-		return { seatsSelected: {}, seatsPaid: {}, layoutReload: false };
+		return { seatsSelected: {}, seatsPaid: {}, paymentTotal: 0, cash: 0, charge: 0 };
 	},
 
 	render: function () {
@@ -46,7 +90,7 @@ var MovieTickets = React.createClass({
 				<div className="layout-fit flex f-midcen">
 					<div className="layout-box">
 						<div onClick={this.closeLayout} style={{textAlign:'right',marginBottom:6}}><i className="fa fa-close" style={{cursor:'pointer'}}></i></div>
-						<div className="flex f-space" style={{borderTop:'dotted 1px #EEE',borderBottom:'dotted 1px #EEE',paddingTop:6,paddingBottom:6}}>
+						<div className="flex f-space" style={{borderTop:'dotted 1px #999',borderBottom:'dotted 1px #999',paddingTop:6,paddingBottom:6,backgroundColor:'#F6F6F6'}}>
 							<div className="flex f-midcen">
 								<div style={{fontSize:'24px !important',color:'#999',marginLeft:12,marginRight:12}}>{this.props.showtime.format}</div>
 								<div>
@@ -66,10 +110,20 @@ var MovieTickets = React.createClass({
 								</div>
 							</div>
 						</div>
-						<div style={{textAlign:'center',color:'#999',letterSpacing:5,marginTop:24}}>SCREEN</div>
-						<SeatingPlanLayout showtime={this.props.showtime} onSeatSelect={this.onSeatSelect} resSeatsPaid={this.resSeatsPaid} reload={this.layoutReload} />
-						<div>
-							<button onClick={this.seatsConfirm}>CONFIRM</button>
+						<div style={{textAlign:'center',color:'#999',letterSpacing:5,marginTop:24,fontSize:'12px !important'}}>SCREEN</div>
+						<SeatingPlanLayout showtime={this.props.showtime} onSeatSelect={this.onSeatSelect} resSeatsPaid={this.resSeatsPaid} _reload={this.state._reloadLayout} />
+						<div style={{textAlign:'center',marginTop:12}}>
+							<span style={{marginRight:6}}>CH</span><input type="text" value={null} style={{width:25,textAlign:'center'}} />
+							<span style={{marginRight:6,marginLeft:6}}>STD</span><input type="text" value={null} style={{width:25,textAlign:'center',marginRight:6}} />
+							<span style={{marginRight:6}}>MEMBER</span><input type="text" value={null} style={{width:50,textAlign:'center',fontWeight:'bold'}} />
+						</div>
+						<div style={{textAlign:'center',marginTop:6,marginBottom:12}}>
+							<span style={{marginRight:6}}>TOTAL</span><input type="text" value={parseInt(this.state.paymentTotal).toCurrencyString()} style={{width:120,fontSize:'24px !important',color:'#D50000'}} />
+							<span style={{marginLeft:6,marginRight:6}}>CASH</span><input type="text" value={this.state.cash} onChange={this.onCash} style={{width:120,fontSize:'24px !important'}} />
+							<span style={{marginLeft:6,marginRight:6}}>CHARGE</span><input type="text" value={this.state.charge} style={{width:120,fontSize:'24px !important',color:'#4CAF50'}} />
+						</div>
+						<div style={{textAlign:'center'}}>
+							<button onClick={this.seatsConfirm} style={{marginRight:12}}>CONFIRM</button>
 							<button>PRINT</button>
 						</div>
 					</div>
@@ -162,7 +216,7 @@ var SeatingPlanLayout = React.createClass({
 
 		e.target.setAttribute('data-status', status);
 
-		this.props.onSeatSelect (n);
+		this.props.onSeatSelect (n, this.state.seatingPlan[row][n]['type']);
 	},
 
 	componentWillMount: function () {
@@ -171,10 +225,14 @@ var SeatingPlanLayout = React.createClass({
 		}.bind (this))
 	},
 
-	componentWillReceiveProps: function () {
-		this.loadSeatingPlan (this.props.showtime.room, function () {
-			this.forceUpdate();
-		}.bind (this))
+	componentWillReceiveProps: function (nP) {
+
+		if (this.props._reload!==nP._reload)
+		{
+			this.loadSeatingPlan (this.props.showtime.room, function () {
+				this.forceUpdate();
+			}.bind (this))
+		}
 	},
 
 	shouldComponentUpdate: function () {
@@ -186,6 +244,8 @@ var SeatingPlanLayout = React.createClass({
 	},
 
 	render: function () {
+
+		// console.log('render from plan')
 
 		if (this.state.seatingPlan) {
 
