@@ -54,6 +54,11 @@ button:hover
 	color: #0288D1;
 }
 
+button:focus
+{
+	background-color: #E3F2FD;
+}
+
 /*----------------------------------------------------------------------------*/
 
 .flex
@@ -124,7 +129,7 @@ button:hover
 
 .layout-box
 {
-	width: 680px; height: 640px;
+	width: 680px; height: 660px;
 	padding: 12px;
 	background-color: #FFF;
 	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23); 
@@ -133,7 +138,7 @@ button:hover
 .layout-print-box
 {
 	display: '';
-	width: 220px; height: 640px;
+	width: 240px; height: 660px;
 	padding: 12px;
 	background-color: #FFF;
 	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23); 
@@ -149,15 +154,16 @@ button:hover
 [role=seat]
 {
 	justify-content: center; align-items: center; 
-    -webkit-justify-content: center; -webkit-align-items: center; 
-    width: 35px; height: 35px; text-align: center; background-color: #E0F2F1; cursor: pointer;
+    -webkit-justify-content: center; -webkit-align-items: center;
+    text-align: center;
+    width: 35px; height: 35px; background-color: #E0F2F1; cursor: pointer;
 }
 
-[role=seat]
+[role=seat] > div
 {
-	font-size:11px !important; letter-spacing:1px;
+	width: 25px; height: 25px; line-height: 25px; font-size:11px !important; letter-spacing:1px;
 }
 [role=seat]:not(:last-child) { margin-right: 3px; }
 [role=seat][data-type=P] { background-color: #81D4FA; }
-[role=seat][data-status=selected] { color: #FFF; background-color: #0288D1; }
+[role=seat][data-status=selected] > div { color: #FFF; background-color: #0288D1; border-radius: 50%; }
 [role=seat][data-status=paid] { color: #D50000; background-color: #FF5252; }

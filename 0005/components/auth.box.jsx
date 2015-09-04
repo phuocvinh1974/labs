@@ -3,7 +3,7 @@ var AuthBox = React.createClass({
 	mixins: [React.addons.LinkedStateMixin],
 
 	getInitialState: function () {
-		return { username: null, password: null }
+		return { username: 'admin', password: 'admin' }
 	},
 
 	render: function () {
@@ -19,7 +19,7 @@ var AuthBox = React.createClass({
 				<div><i className="fa fa-lock" style={{color:'#FFF',fontSize:'18pt !important'}}></i></div>
 				<div style={{marginTop:24,fontSize:'18pt !important',letterSpacing:2,color:'#FFF'}}>LOGIN</div>
 				<div style={{marginBottom:2}}><input type="text" valueLink={this.linkState('username')} placeholder="enter Username" style={{textAlign:'center'}} /></div>
-				<div style={{marginBottom:8}}><input type="password" valueLink={this.linkState('password')}  placeholder="and Password" style={{textAlign:'center'}} /></div>
+				<div style={{marginBottom:8}}><input type="password" valueLink={this.linkState('password')} placeholder="and Password" style={{textAlign:'center'}} /></div>
 				<div style={{marginBottom:4}}><button onClick={this.props.onSubmit.bind(this,this.state.username,this.state.password)}>submit</button></div>
 				{msg}
 			</div>

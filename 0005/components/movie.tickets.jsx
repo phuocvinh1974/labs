@@ -33,16 +33,22 @@ var MovieTickets = React.createClass ({
 	},
 
 	onCash: function (e) {
+
 		var v = event.target.value;
 		var c = 0;
 
-		if (v > this.state.paymentTotal)
+		if (v >= this.state.paymentTotal)
+		{
 			c = v - this.state.paymentTotal;
+			document.getElementById('print').focus();
+		}
 
 		this.setState({ cash: v, charge: c });
 	},
 
 	onSeatSelect: function (n,t) { // n = seatID , t = type = VIP / NORMAL
+
+		this.setState ({ cash: 0, charge: 0 });
 
 		if (!this.state.seatsSelected[n])
 		{
@@ -84,13 +90,33 @@ var MovieTickets = React.createClass ({
 		this.props.onClose ();
 	},
 
-	showPrintingLayout: function (s) {
-		console.log(s)
-		this.setState ({ showPrintingLayout: s })
+	printing: function (o) {
+		
+		if (Object.keys(this.state.seatsSelected).length)
+		{
+			$.ajax({
+				type: 'post',
+				url: 'modules/tickets/printing.php',
+				data: { post: o },
+				success: function (res) {
+
+					var iframe = document.createElement('iframe');
+					iframe.style.display = 'none';
+					iframe.src = 'tmp/i.pdf';
+					document.body.appendChild(iframe);
+
+					var pdf = document.getElementsByTagName('iframe')[0];
+					pdf.focus();
+					pdf.contentWindow.print();
+				}
+			});
+		}
+		else
+			alert ('nothing to print!')
 	},
 
 	getInitialState: function () {
-		return { showPrintingLayout: false, seatsSelected: {}, seatsPaid: {}, paymentTotal: 0, cash: 0, charge: 0 };
+		return { seatsSelected: {}, seatsPaid: {}, paymentTotal: 0, cash: 0, charge: 0 };
 	},
 
 	render: function () {
@@ -127,17 +153,16 @@ var MovieTickets = React.createClass ({
 							<span style={{marginRight:6,marginLeft:6}}>STD</span><input type="text" value={null} style={{width:25,textAlign:'center',marginRight:6}} />
 							<span style={{marginRight:6}}>MEMBER</span><input type="text" value={null} style={{width:50,textAlign:'center',fontWeight:'bold'}} />
 						</div>
-						<div style={{textAlign:'center',marginTop:6,marginBottom:12}}>
+						<div style={{textAlign:'center',marginTop:12,marginBottom:24}}>
 							<span style={{marginRight:6}}>TOTAL</span><input type="text" value={parseInt(this.state.paymentTotal).toCurrencyString()} style={{width:120,fontSize:'24px !important',color:'#D50000'}} />
 							<span style={{marginLeft:6,marginRight:6}}>CASH</span><input type="text" value={this.state.cash} onChange={this.onCash} style={{width:120,fontSize:'24px !important'}} />
 							<span style={{marginLeft:6,marginRight:6}}>CHARGE</span><input type="text" value={this.state.charge.toCurrencyString()} style={{width:120,fontSize:'24px !important',color:'#4CAF50'}} />
 						</div>
 						<div style={{textAlign:'center'}}>
 							<button onClick={this.seatsConfirm} style={{marginRight:12}}>CONFIRM</button>
-							<button onClick={this.showPrintingLayout.bind(this,true)}>PRINT</button>
+							<button onClick={this.printing.bind(this,this.props.showtime)} id="print">PRINT</button>
 						</div>
 					</div>
-					<PrintingLayout show={this.state.showPrintingLayout} onClose={this.showPrintingLayout.bind(this,false)} />
 				</div>
 			);
 		else
@@ -225,7 +250,10 @@ var SeatingPlanLayout = React.createClass({
 		status = status === 'selected' ? 'available' : 'selected';
 		this.state.seatingPlan[row][n]['status'] = status;		
 
-		e.target.setAttribute('data-status', status);
+		if (e.target.getAttribute('role'))
+			e.target.setAttribute('data-status', status);
+		else 
+			e.target.parentNode.setAttribute('data-status', status);
 
 		this.props.onSeatSelect (n, this.state.seatingPlan[row][n]['type']);
 	},
@@ -256,8 +284,6 @@ var SeatingPlanLayout = React.createClass({
 
 	render: function () {
 
-		// console.log('render from plan')
-
 		if (this.state.seatingPlan) {
 
 			return (
@@ -269,10 +295,11 @@ var SeatingPlanLayout = React.createClass({
 							
 							var seat = this.state.seatingPlan[row][n];
 				
-							return (<div onClick={this.onSeatSelect.bind(this,row,n)}
-									role="seat"
-									data-status={seat.status} data-type={seat.type}
-									className="flex">{n}</div>);
+							return (
+								<div onClick={this.onSeatSelect.bind(this,row,n)} role="seat" data-status={seat.status} data-type={seat.type} className="flex">
+									<div>{n}</div>
+								</div>
+							);
 
 						}.bind (this));
 						
@@ -284,19 +311,6 @@ var SeatingPlanLayout = React.createClass({
 			);
 
 		} else 
-			return null;
-	}
-});
-
-var PrintingLayout = React.createClass ({
-	render: function () {
-		if (this.props.show)
-			return (
-				<div className="layout-print-box">
-					<div onClick={this.props.onClose} style={{textAlign:'right'}}><i className="fa fa-close" style={{cursor:'pointer'}}></i></div>
-				</div>
-			);
-		else
 			return null;
 	}
 });
