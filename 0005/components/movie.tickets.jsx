@@ -34,7 +34,12 @@ var MovieTickets = React.createClass ({
 
 	onCash: function (e) {
 		var v = event.target.value;
-		this.setState({ cash: v, charge: v-this.state.paymentTotal });
+		var c = 0;
+
+		if (v > this.state.paymentTotal)
+			c = v - this.state.paymentTotal;
+
+		this.setState({ cash: v, charge: c });
 	},
 
 	onSeatSelect: function (n,t) { // n = seatID , t = type = VIP / NORMAL
@@ -79,8 +84,13 @@ var MovieTickets = React.createClass ({
 		this.props.onClose ();
 	},
 
+	showPrintingLayout: function (s) {
+		console.log(s)
+		this.setState ({ showPrintingLayout: s })
+	},
+
 	getInitialState: function () {
-		return { seatsSelected: {}, seatsPaid: {}, paymentTotal: 0, cash: 0, charge: 0 };
+		return { showPrintingLayout: false, seatsSelected: {}, seatsPaid: {}, paymentTotal: 0, cash: 0, charge: 0 };
 	},
 
 	render: function () {
@@ -120,13 +130,14 @@ var MovieTickets = React.createClass ({
 						<div style={{textAlign:'center',marginTop:6,marginBottom:12}}>
 							<span style={{marginRight:6}}>TOTAL</span><input type="text" value={parseInt(this.state.paymentTotal).toCurrencyString()} style={{width:120,fontSize:'24px !important',color:'#D50000'}} />
 							<span style={{marginLeft:6,marginRight:6}}>CASH</span><input type="text" value={this.state.cash} onChange={this.onCash} style={{width:120,fontSize:'24px !important'}} />
-							<span style={{marginLeft:6,marginRight:6}}>CHARGE</span><input type="text" value={this.state.charge} style={{width:120,fontSize:'24px !important',color:'#4CAF50'}} />
+							<span style={{marginLeft:6,marginRight:6}}>CHARGE</span><input type="text" value={this.state.charge.toCurrencyString()} style={{width:120,fontSize:'24px !important',color:'#4CAF50'}} />
 						</div>
 						<div style={{textAlign:'center'}}>
 							<button onClick={this.seatsConfirm} style={{marginRight:12}}>CONFIRM</button>
-							<button>PRINT</button>
+							<button onClick={this.showPrintingLayout.bind(this,true)}>PRINT</button>
 						</div>
 					</div>
+					<PrintingLayout show={this.state.showPrintingLayout} onClose={this.showPrintingLayout.bind(this,false)} />
 				</div>
 			);
 		else
@@ -273,6 +284,19 @@ var SeatingPlanLayout = React.createClass({
 			);
 
 		} else 
+			return null;
+	}
+});
+
+var PrintingLayout = React.createClass ({
+	render: function () {
+		if (this.props.show)
+			return (
+				<div className="layout-print-box">
+					<div onClick={this.props.onClose} style={{textAlign:'right'}}><i className="fa fa-close" style={{cursor:'pointer'}}></i></div>
+				</div>
+			);
+		else
 			return null;
 	}
 });
