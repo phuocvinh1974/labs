@@ -6,6 +6,8 @@ $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, [50,50], true, 'UTF-8', false);
 
 $post = $_POST['post'];
 
+var_dump($post);
+
 // add first page ---
 $pdf->AddPage();
 $pdf->Cell(0, 12, 'Ticket 1', 1, 1, 'C');

@@ -87,17 +87,19 @@ var MovieTickets = React.createClass ({
 
 		this.replaceState (this.getInitialState());
 
+		document.body.removeChild(document.getElementsByTagName('iframe')[0]);
+
 		this.props.onClose ();
 	},
 
-	printing: function (o) {
+	printing: function (s,p) {
 		
 		if (Object.keys(this.state.seatsSelected).length)
 		{
 			$.ajax({
 				type: 'post',
 				url: 'modules/tickets/printing.php',
-				data: { post: o },
+				data: { post: $.extend(s, p) },
 				success: function (res) {
 
 					var iframe = document.createElement('iframe');
@@ -160,7 +162,7 @@ var MovieTickets = React.createClass ({
 						</div>
 						<div style={{textAlign:'center'}}>
 							<button onClick={this.seatsConfirm} style={{marginRight:12}}>CONFIRM</button>
-							<button onClick={this.printing.bind(this,this.props.showtime)} id="print">PRINT</button>
+							<button onClick={this.printing.bind(this,this.props.showtime,this.props.profile)} id="print">PRINT</button>
 						</div>
 					</div>
 				</div>

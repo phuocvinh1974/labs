@@ -70,7 +70,7 @@ var App = React.createClass({
 						<MovieDatePicker current={this.state.dateSelected} onDateSelect={this.dateSelect} />
 					</div>
 					<MovieTimes current={this.state.dateSelected} onTimeSelect={this.timeSelect} />
-					<MovieTickets onClose={this.closeLayout} show={this.state.showLayout} showtime={this.state.movieTimeSelected} pricing={this.state.Pricing} />
+					<MovieTickets onClose={this.closeLayout} show={this.state.showLayout} showtime={this.state.movieTimeSelected} pricing={this.state.Pricing} profile={this.state.profile} />
 				</div>
 			);
 		}

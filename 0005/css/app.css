@@ -54,10 +54,10 @@ button:hover
 	color: #0288D1;
 }
 
-button:focus
+/*button:focus
 {
 	background-color: #E3F2FD;
-}
+}*/
 
 /*----------------------------------------------------------------------------*/
 
