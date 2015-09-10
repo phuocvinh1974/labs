@@ -1,0 +1,26 @@
+@font-face{ font-family:"RobotoCondensed-Light"; src:url("../fonts/RobotoCondensed-Light.ttf"); }
+@font-face{ font-family:"RobotoCondensed-Bold"; src:url("../fonts/RobotoCondensed-Bold.ttf"); }
+* { margin:0 0 0 0; padding:0 0 0 0; font-family:"RobotoCondensed-Light" !important; font-size: 12pt !important; }
+.fa {font-family:"FontAwesome" !important;}
+
+#main-menu * { font-family: "RobotoCondensed-Bold" !important; color: SlateGray; }
+#main-menu li#mnu-home { color: #000; }
+.mnu-selected{ color:#ff6000 !important; }
+
+#main-content { margin-top: 12px; }
+
+.inline > div{float:left}
+
+.panel-L {
+    background-size: 300px 400px;
+    background-image: radial-gradient(circle at top left, #dddddd, #ffffff 50%);
+    background-repeat: no-repeat;
+}
+
+.trama { background-image: url('../img/trama.png') !important; background-repeat:repeat; }
+
+/*noob*/
+.noob { display: -webkit-box; display: -moz-box; display: -ms-flexbox; display: -webkit-flex; display: flex; }
+.noob-inline { -webkit-flex-direction: row; flex-direction: row; }
+.noob-break { -webkit-flex-direction: column; flex-direction: column; }
+.noob-centered { -webkit-justify-content: center; -webkit-align-items: center; justify-content: center; align-items: center;}

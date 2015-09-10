@@ -64,8 +64,7 @@ var MovieTickets = React.createClass ({
 
 	seatsConfirm: function () {
 
-		if (!Object.keys(this.state.seatsSelected).length)
-		return;
+		if (!this.state._confirmAllow) return false;
 
 		var data = { infos: this.props.showtime, seats: $.extend(this.state.seatsSelected, this.state.seatsPaid) };
 
@@ -74,6 +73,9 @@ var MovieTickets = React.createClass ({
 			url: 'modules/tickets/seats-saving.php',
 			data: { post: data },
 			success: function (res) {
+
+				var i = document.getElementsByTagName('iframe')[0];
+				if (i) document.body.removeChild (i);
 
 				this.replaceState (this.getInitialState());
 
@@ -85,32 +87,36 @@ var MovieTickets = React.createClass ({
 
 	closeLayout: function () {
 
-		this.replaceState (this.getInitialState());
+		this.replaceState ( this.getInitialState() );
 
-		document.body.removeChild(document.getElementsByTagName('iframe')[0]);
+		var i = document.getElementsByTagName('iframe')[0];
+		if (i) document.body.removeChild (i);
 
 		this.props.onClose ();
 	},
 
-	printing: function (s,p) {
+	printing: function (sh,p) {
 		
 		if (Object.keys(this.state.seatsSelected).length)
 		{
 			$.ajax({
 				type: 'post',
 				url: 'modules/tickets/printing.php',
-				data: { post: $.extend(s, p) },
+				data: { post: { showtime: sh, profile: p, seats: this.state.seatsSelected }  },
+				dataType: 'json',
 				success: function (res) {
 
 					var iframe = document.createElement('iframe');
 					iframe.style.display = 'none';
-					iframe.src = 'tmp/i.pdf';
+					iframe.src = 'tmp/' + res.filename + '.pdf';
 					document.body.appendChild(iframe);
 
 					var pdf = document.getElementsByTagName('iframe')[0];
 					pdf.focus();
 					pdf.contentWindow.print();
-				}
+
+					this.setState({ _confirmAllow: true });
+				}.bind (this)
 			});
 		}
 		else
@@ -118,7 +124,7 @@ var MovieTickets = React.createClass ({
 	},
 
 	getInitialState: function () {
-		return { seatsSelected: {}, seatsPaid: {}, paymentTotal: 0, cash: 0, charge: 0 };
+		return { seatsSelected: {}, seatsPaid: {}, paymentTotal: 0, cash: 0, charge: 0, _confirmAllow: false };
 	},
 
 	render: function () {
@@ -158,10 +164,10 @@ var MovieTickets = React.createClass ({
 						<div style={{textAlign:'center',marginTop:12,marginBottom:24}}>
 							<span style={{marginRight:6}}>TOTAL</span><input type="text" value={parseInt(this.state.paymentTotal).toCurrencyString()} style={{width:120,fontSize:'24px !important',color:'#D50000'}} />
 							<span style={{marginLeft:6,marginRight:6}}>CASH</span><input type="text" value={this.state.cash} onChange={this.onCash} style={{width:120,fontSize:'24px !important'}} />
-							<span style={{marginLeft:6,marginRight:6}}>CHARGE</span><input type="text" value={this.state.charge.toCurrencyString()} style={{width:120,fontSize:'24px !important',color:'#4CAF50'}} />
+							<span style={{marginLeft:6,marginRight:6}}>CHANGE</span><input type="text" value={this.state.charge.toCurrencyString()} style={{width:120,fontSize:'24px !important',color:'#4CAF50'}} />
 						</div>
 						<div style={{textAlign:'center'}}>
-							<button onClick={this.seatsConfirm} style={{marginRight:12}}>CONFIRM</button>
+							<button onClick={this.seatsConfirm} disabled={this.state._confirmAllow ? null : 'disabled'} style={{marginRight:12}}>CONFIRM</button>
 							<button onClick={this.printing.bind(this,this.props.showtime,this.props.profile)} id="print">PRINT</button>
 						</div>
 					</div>

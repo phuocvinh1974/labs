@@ -1,0 +1,34 @@
+<div class="viewport trama">
+	<div class="close" onclick="$(_GES).trigger('layout-close')"><i class="fa fa-close"></i></div>
+	<div class="stages">
+
+		<div class="seats-selection">
+			<div>T</div>
+			<div style="color: #fff;">SCREEN</div>
+			<div id="seating-plan-wrapper">seating plan loading...</div>
+			<div style="color: #fff;"><i class="fa fa-square"></i> Available <i class="fa fa-square"></i> Not-Available <i class="fa fa-square"></i> Vip</div>
+			<div style=""><button onclick="$(_GES).trigger('seats-confirm')">CONFIRM</button></div>
+		</div>
+
+		<div class="payment">
+			<div>
+				<div>SEATS</div>
+				<div id="lbl-seats-total">?</div>
+				<div>TOTAL</div>
+				<div id="lbl-payment-total">?</div>
+				<hr/>
+				<div>CHILDRENS / STUDENTS</div>
+				<div>? / ?</div>
+				<div>MEMBER-CODE</div>
+				<div><input/></div>
+				<hr/>
+				<div>CASH</div>
+				<div><input/></div>
+			</div>
+			<div><button onclick="$(_GES).trigger('payment-cancel')">CANCEL</button></div>
+			<div><button onclick="$(_GES).trigger('payment-confirm')">CONFIRM</button></div>
+		</div>
+
+		<div class="printing">PRINT</div>
+	</div>
+</div>

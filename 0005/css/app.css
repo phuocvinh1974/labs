@@ -54,6 +54,10 @@ button:hover
 	color: #0288D1;
 }
 
+button:disabled
+{
+	color: #EEE;
+}
 /*button:focus
 {
 	background-color: #E3F2FD;
