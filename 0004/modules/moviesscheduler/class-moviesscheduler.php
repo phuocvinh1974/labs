@@ -6,7 +6,7 @@ class MoviesScheduler {
 
     public function __construct() {
 
-        include_once $_SERVER ['DOCUMENT_ROOT'] . '/modules/common/class-nosql-database.php';
+        include_once '../common/class-nosql-database.php';
         try {
             $connect = new NoSqlDatabase();
             $this->db = $connect->nosql->selectDB('gsdb');

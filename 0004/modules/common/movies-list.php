@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER ['DOCUMENT_ROOT'] . '/modules/common/class-nosql-database.php';
+include_once 'class-nosql-database.php';
 
 try {
     $db = new NoSqlDatabase();

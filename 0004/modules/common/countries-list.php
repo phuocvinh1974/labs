@@ -1,5 +1,5 @@
 <?php
-include_once $_SERVER ['DOCUMENT_ROOT'] . '/modules/common/class-database.php';
+include_once 'class-database.php';
 
 $db = new Database();
 

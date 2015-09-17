@@ -5,7 +5,7 @@ class NoSqlDatabase {
     public $nosql;
 
     function __construct() {
-        include_once $_SERVER ['DOCUMENT_ROOT'] . '/../etc/config.php';
+        include_once __DIR__ . '/../../etc/config.php';
         try {
             $this->nosql = new MongoClient($_CONFIG['dsn_mongo']);
         } catch (Exception $e) {

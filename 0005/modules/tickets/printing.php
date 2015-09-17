@@ -17,22 +17,18 @@ $pdf->SetMargins(0, 0, 0, true);
 
 foreach ($post['seats'] as $k=>$v)
 {
-
 	$pdf->AddPage('L');
 
-	$pdf->SetFontSize(14);
-
-	// Cell(w, h, text, )
-	$pdf->Cell(32, 0, $k, 0, 2);
-	// $pdf->SetFontSize(8);
-	// $pdf->Cell(0, 0, $post['showtime']['IntTitle'], 0, 2);
-
-	// $pdf->Cell(10, 0, $post['showtime']['room'], 0, 0);
-	// $pdf->Cell(0, 0, $post['showtime']['start'], 0, 1);
-	
-	// $pdf->Cell(0, 0, $post['showtime']['format'], 0, 2);
-	// $pdf->Cell(0, 0, $post['showtime']['date'], 0, 2);
-	// $pdf->Cell(0, 0, $post['profile']['fullName'], 0, 2);
+	//lien 1
+	$pdf->SetFontSize(8);
+	$pdf->Text(0, 0, date('d m Y', strtotime($post['showtime']['date'])));
+	$pdf->Text(20, 0,  date('H:i', mktime(0, $post['showtime']['start'])));
+	$pdf->Text(0, 2, $post['showtime']['IntTitle']);
+	$pdf->Text(0, 4, $k);
+	$pdf->Text(10, 4, $v['type']);
+	$pdf->Text(0, 6, $post['showtime']['room']);
+	$pdf->Text(0, 8, $v['price']);
+	$pdf->Text(0, 10, $post['profile']['fullName']);
 }
 
 $filename = time();

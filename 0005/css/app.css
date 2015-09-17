@@ -58,6 +58,11 @@ button:disabled
 {
 	color: #EEE;
 }
+
+a:link
+{
+	text-decoration: none;
+}
 /*button:focus
 {
 	background-color: #E3F2FD;

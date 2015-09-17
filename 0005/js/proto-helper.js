@@ -21,6 +21,6 @@ Number.prototype.toHMTString = function () { // return HH:MM string
     return h + ":" + m;
 };
 
-Number.prototype.toCurrencyString = function () { // return 1.000.000.00 string
-    return this.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+Number.prototype.toCurrencyString = function () { // return 1,000,000 string
+    return this.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };

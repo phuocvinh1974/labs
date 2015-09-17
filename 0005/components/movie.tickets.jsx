@@ -6,6 +6,19 @@ var MovieTickets = React.createClass ({
 		this.state.seatsPaid = s;
 	},
 
+	/* Number of NonVip (Normal) */
+	getNoN: function () {
+
+		var n = 0;
+		
+		Object.keys(this.state.seatsSelected).map( function (k) {
+				if ( this.state.seatsSelected[k].type==='N' ) n++;
+			}.bind (this)
+		);
+
+		return n;
+	},
+
 	getPrice: function (t) {
 
 		var day = new Date(this.props.showtime.date).getDay(),
@@ -46,14 +59,52 @@ var MovieTickets = React.createClass ({
 		this.setState({ cash: v, charge: c });
 	},
 
+	onChildrens: function () {
+
+		var v = parseInt(event.target.value);
+
+		if ( isNaN(v) ) return 0;
+
+		var NoN = this.getNoN();
+
+		if ( v + this.state.students > NoN )
+		{
+			return null;
+		}
+		else
+		{
+			this.setState ({ childrens: v });
+		}
+
+	},
+
+	onStudents: function () {
+		
+		var v = parseInt(event.target.value);
+
+		if ( isNaN(v) ) return 0;
+
+		var NoN = this.getNoN();
+
+		if ( v + this.state.childrens > NoN )
+		{
+			return null;
+		}
+		else
+		{
+			this.setState ({ students: v });
+		}
+	},
+
 	onSeatSelect: function (n,t) { // n = seatID , t = type = VIP / NORMAL
 
 		this.setState ({ cash: 0, charge: 0 });
 
 		if (!this.state.seatsSelected[n])
 		{
-			this.state.seatsSelected[n] = true;
-			this.setState({ paymentTotal: this.state.paymentTotal + this.getPrice (t) })
+			var p = this.getPrice (t);
+			this.state.seatsSelected[n] = { type: t, price: p };
+			this.setState({ paymentTotal: this.state.paymentTotal + p })
 		}
 		else
 		{
@@ -124,7 +175,7 @@ var MovieTickets = React.createClass ({
 	},
 
 	getInitialState: function () {
-		return { seatsSelected: {}, seatsPaid: {}, paymentTotal: 0, cash: 0, charge: 0, _confirmAllow: false };
+		return { seatsSelected: {}, seatsPaid: {}, childrens: 0, students: 0, paymentTotal: 0, cash: 0, charge: 0, _confirmAllow: false };
 	},
 
 	render: function () {
@@ -157,14 +208,14 @@ var MovieTickets = React.createClass ({
 						<div style={{textAlign:'center',color:'#999',letterSpacing:5,marginTop:24,fontSize:'12px !important'}}>SCREEN</div>
 						<SeatingPlanLayout showtime={this.props.showtime} onSeatSelect={this.onSeatSelect} resSeatsPaid={this.resSeatsPaid} _reload={this.state._reloadLayout} />
 						<div style={{textAlign:'center',marginTop:12}}>
-							<span style={{marginRight:6}}>CH</span><input type="text" value={null} style={{width:25,textAlign:'center'}} />
-							<span style={{marginRight:6,marginLeft:6}}>STD</span><input type="text" value={null} style={{width:25,textAlign:'center',marginRight:6}} />
+							<span style={{marginRight:6}}>CH</span><input type="text" onChange={this.onChildrens} value={this.state.childrens} maxLength="2" style={{width:25,textAlign:'center'}} />
+							<span style={{marginRight:6,marginLeft:6}}>STD</span><input type="text" onChange={this.onStudents} value={this.state.students} maxLength="2" style={{width:25,textAlign:'center',marginRight:6}} />
 							<span style={{marginRight:6}}>MEMBER</span><input type="text" value={null} style={{width:50,textAlign:'center',fontWeight:'bold'}} />
 						</div>
 						<div style={{textAlign:'center',marginTop:12,marginBottom:24}}>
-							<span style={{marginRight:6}}>TOTAL</span><input type="text" value={parseInt(this.state.paymentTotal).toCurrencyString()} style={{width:120,fontSize:'24px !important',color:'#D50000'}} />
-							<span style={{marginLeft:6,marginRight:6}}>CASH</span><input type="text" value={this.state.cash} onChange={this.onCash} style={{width:120,fontSize:'24px !important'}} />
-							<span style={{marginLeft:6,marginRight:6}}>CHANGE</span><input type="text" value={this.state.charge.toCurrencyString()} style={{width:120,fontSize:'24px !important',color:'#4CAF50'}} />
+							<span style={{marginRight:6}}>TOTAL</span><input type="text" value={parseInt(this.state.paymentTotal).toCurrencyString()} style={{width:100,fontSize:'24px !important',color:'#D50000'}} />
+							<span style={{marginLeft:6,marginRight:6}}>CASH</span><input type="text" value={this.state.cash} onChange={this.onCash} style={{width:100,fontSize:'24px !important'}} />
+							<span style={{marginLeft:6,marginRight:6}}>CHANGE</span><input type="text" value={this.state.charge.toCurrencyString()} style={{width:100,fontSize:'24px !important',color:'#4CAF50'}} />
 						</div>
 						<div style={{textAlign:'center'}}>
 							<button onClick={this.seatsConfirm} disabled={this.state._confirmAllow ? null : 'disabled'} style={{marginRight:12}}>CONFIRM</button>
