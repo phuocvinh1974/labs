@@ -58,11 +58,13 @@ var MovieTimes = React.createClass ({
 
 							if (_showtimes[this._id]===undefined) 
 								_showtimes[this._id] = new Array({
+								shortTitle: _index[this._id].shortTitle,
 								IntTitle: _index[this._id].IntTitle,
 								Title: _index[this._id].Title,
 								movie: this._id, date: d, start: this.start, room: thisroom, format: this.format, events: this.events });
                     		else
 							 	_showtimes[this._id].push({
+							 	shortTitle: _index[this._id].shortTitle,
 							 	IntTitle: _index[this._id].IntTitle,
 							 	Title: _index[this._id].Title,
 							 	movie: this._id, date: d, start: this.start, room: thisroom, format: this.format, events: this.events });
@@ -100,7 +102,7 @@ var MovieTimes = React.createClass ({
 			var n = this.state.Showtimes[k];
 
 			var t = Object.keys(n).map( function (k) {
-				return (<span onClick={this.props.onTimeSelect.bind(this, n[k])} className="m-time"><i className="fa fa-caret-right" style={{marginRight:3}}></i>{ parseInt(n[k].start).toHMTString() }</span>);
+				return (<span onClick={this.props.onTimeSelect.bind(this, n[k])} style={{marginRight:12}} className="m-time"><i className="fa fa-caret-right" style={{marginRight:3}}></i>{ parseInt(n[k].start).toHMTString() }</span>);
 			}.bind (this));
 			
 			return (

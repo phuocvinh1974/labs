@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER ['DOCUMENT_ROOT'] . '/modules/movieslist/class-movieslist.php';
+include_once 'class-movieslist.php';
 
 $action = isset($_GET['action']) ? str_replace("-", "_", $_GET['action']) : NULL;
 

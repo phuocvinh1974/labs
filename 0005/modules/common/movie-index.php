@@ -14,6 +14,7 @@ $moviesindex = [];
 
 foreach ($docs as $item) {
     $moviesindex[(string) $item['_id']] = [
+    	'shortTitle' => isset($item['shortTitle']) ? $item['shortTitle'] : null,
         'IntTitle' => $item['IntTitle'],
         'Title' => $item['Title'],
         'Format' => $item['Format']

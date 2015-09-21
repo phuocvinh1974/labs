@@ -12,6 +12,8 @@
         <ul>
             <li style="display:none"><input id="txt-id" hidden="true" value=""></li>
             <li style="text-align:center;margin-top:19px;margin-bottom:19px;"><button id="btn-new">NEW</button></li>
+            <li>Short Title</li>
+            <li><input id="txt-shorttitle" role="input" style="font-weight:bold"></li>
             <li>International Title</li>
             <li><input id="txt-inttitle" role="input"></li>
             <li>Title</li>

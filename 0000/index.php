@@ -1,3 +1,5 @@
 <?php
 
-echo time();
+$a = 288 % 60;
+
+echo $a;

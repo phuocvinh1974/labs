@@ -20,5 +20,11 @@
 		<script type="text/jsx">
             React.render(<App />, document.body);
         </script>
+
+        <script type="text/javascript">
+			// $(window).on("beforeunload", function () {
+			// 	return false;
+			// });
+        </script>
 	</body>
 </html>

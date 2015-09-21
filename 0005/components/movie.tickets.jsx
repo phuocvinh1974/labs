@@ -45,10 +45,25 @@ var MovieTickets = React.createClass ({
 		return price;
 	},
 
+	paymentDiscount: function (s,n) {
+
+		var day = new Date(this.props.showtime.date).getDay(),
+		start = parseInt(this.props.showtime.start),
+		format = this.props.showtime.format,
+		at = start < 600 ? 'start' : start > 600 && start < 1020 ? 'mid' : 'end';
+
+		if ( s==='children' )
+		{
+			this.state.childrensDiscount = parseInt(this.props.pricing[day][at]['adult']) - parseInt(this.props.pricing[day][at]['children']) * n;
+		}
+	},
+
 	onCash: function (e) {
 
 		var v = event.target.value;
 		var c = 0;
+
+		if ( isNaN(v) ) return 0;
 
 		if (v >= this.state.paymentTotal)
 		{
@@ -59,23 +74,25 @@ var MovieTickets = React.createClass ({
 		this.setState({ cash: v, charge: c });
 	},
 
-	onChildrens: function () {
+	onChildrens: function ()
+	{
+		var n = parseInt(event.target.value);
 
-		var v = parseInt(event.target.value);
-
-		if ( isNaN(v) ) return 0;
+		if ( isNaN(n) ) return 0;
 
 		var NoN = this.getNoN();
 
-		if ( v + this.state.students > NoN )
+		if ( n + this.state.students > NoN )
 		{
 			return null;
 		}
 		else
 		{
-			this.setState ({ childrens: v });
-		}
+			//todo
+			this.paymentDiscount('children', n);
 
+			this.setState ({ childrens: n });
+		}
 	},
 
 	onStudents: function () {
@@ -175,7 +192,11 @@ var MovieTickets = React.createClass ({
 	},
 
 	getInitialState: function () {
-		return { seatsSelected: {}, seatsPaid: {}, childrens: 0, students: 0, paymentTotal: 0, cash: 0, charge: 0, _confirmAllow: false };
+		return {
+			seatsSelected: {}, seatsPaid: {},
+			childrens: 0, students: 0, paymentTotal: 0, cash: 0, charge: 0,
+			childrensDiscount: 0, studentsDiscount: 0,
+			_confirmAllow: false };
 	},
 
 	render: function () {

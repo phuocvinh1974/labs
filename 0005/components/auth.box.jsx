@@ -15,7 +15,7 @@ var AuthBox = React.createClass({
 		}
 
 		return (
-			<div className="AuthBox flex f-column f-midcen">
+			<div className="AuthBox flex flex-direction-column flex-align-center flex-justify-center">
 				<div><i className="fa fa-lock" style={{color:'#FFF',fontSize:'18pt !important'}}></i></div>
 				<div style={{marginTop:24,fontSize:'18pt !important',letterSpacing:2,color:'#FFF'}}>LOGIN</div>
 				<div style={{marginBottom:2}}><input type="text" valueLink={this.linkState('username')} placeholder="enter Username" style={{textAlign:'center'}} /></div>

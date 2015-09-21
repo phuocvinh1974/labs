@@ -36,7 +36,7 @@ $(document).ready(
             }
 
             function panelReset() {
-                $("#txt-id,#txt-inttitle,#txt-title,#txt-runtime").val(null);
+                $("#txt-id,#txt-shorttitle,#txt-inttitle,#txt-title,#txt-runtime").val(null);
                 $("#txt-releasedate").val(null);
                 $("#lst-format,#lst-genres").jqxDropDownList("uncheckAll");
                 $("#lst-restricted,#lst-studios,#lst-distributors").jqxDropDownList("clearSelection");
@@ -50,7 +50,7 @@ $(document).ready(
             var studios_src = {datatype: "json", url: "modules/common/studios-list.php", datafields: [{name: "name"}], root: "items"};
             var distributors_src = {datatype: "json", url: "modules/common/distributors-list.php", datafields: [{name: "name"}], root: "items"};
             var grid_movieslist_src = {datatype: "json", url: "modules/common/movies-list.php",
-                datafields: [{name: "_id"},
+                datafields: [{name: "_id"}, {name: "shortTitle"},
                     {name: "IntTitle"}, {name: "Title"}, {name: "Runtime"}, {name: "Format"}, {name: "Genres"}, {name: "ReleaseDate"},
                     {name: "Studio"}, {name: "Distributor"}, {name: "Restricted"}, {name: "Storyline"}],
                 root: "items"};
@@ -124,6 +124,7 @@ $(document).ready(
                 var row = $("#grid-movieslist").jqxGrid("getrowdata", e.args.rowindex);
 
                 $("#txt-id").val(row._id.$id);
+                $("#txt-shorttitle").val(row.shortTitle);
                 $("#txt-inttitle").val(row.IntTitle);
                 $("#txt-title").val(row.Title);
                 $("#txt-runtime").val(row.Runtime);
@@ -167,6 +168,7 @@ $(document).ready(
                 var action = "add";
 
                 post._id = $("#txt-id").val();
+                post.shortTitle = $("#txt-shorttitle").val();
                 post.IntTitle = $("#txt-inttitle").val();
                 post.Title = $("#txt-title").val();
                 post.Runtime = $("#txt-runtime").val();

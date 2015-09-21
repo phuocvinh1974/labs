@@ -62,7 +62,7 @@ var App = React.createClass({
 		if (this.state.granted)
 		{
 			return (
-				<div className="App flex f-midcen">
+				<div className="App flex flex-align-center flex-justify-center">
 					<div style={{textAlign:'right',marginRight:24}}>
 						<div style={{fontSize:'18pt !important',letterSpacing:2,color:'#FFF',backgroundColor:'#F06292'}}>MOVIE SHOWTIMES</div>
 						<div style={{marginBottom:12}}><i className="fa fa-user" style={{fontSize:'10pt !important',marginRight:6}}></i>{this.state.profile.fullName} | <span onClick={this.logout} style={{cursor:'pointer'}}>Logout</span></div>
@@ -75,7 +75,7 @@ var App = React.createClass({
 		}
 		else 
 			return (
-				<div className="App flex f-midcen">
+				<div className="App flex flex-align-center flex-justify-center">
 					<AuthBox onSubmit={this.authCheck} data-res={this.state.granted} />
 				</div>
 			);

@@ -73,6 +73,7 @@ a:link
 .flex
 {
 	display: flex;
+	display: -webkit-flex;
 }
 
 .flex-direction-column
@@ -83,11 +84,19 @@ a:link
 .flex-justify-center
 {
 	justify-content: center;
+	-webkit-justify-content: center;
 }
 
 .flex-align-center
 {
 	align-items: center;
+	-webkit-align-items: center;
+}
+
+.flex-direction-column
+{
+	flex-direction: column;
+	-webkit-flex-direction: column;
 }
 
 /*----------------------------------------------------------------------------*/
@@ -127,6 +136,13 @@ a:link
 .datepicker [data-isselected=true] { color: #FFF; }
 
 .infos { margin-bottom: 6px; }
+
+.m-time:hover
+{
+	color: #FFF;
+	background-color: #F06292;
+	font-weight: bold;
+}
 
 .layout-fit {
 	position: absolute;
