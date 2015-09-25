@@ -54,24 +54,29 @@ var MovieTickets = React.createClass ({
 
 		if ( s==='children' )
 		{
-			this.state.childrensDiscount = parseInt(this.props.pricing[day][at]['adult']) - parseInt(this.props.pricing[day][at]['children']) * n;
+			var m = (parseInt(this.props.pricing[day][at]['adult']) - parseInt(this.props.pricing[day][at]['children'])) * n;
+
+			this.setState ({ childrensDiscount: m })
 		}
 	},
 
-	onCash: function (e) {
+	onCash: function () {
 
 		var v = event.target.value;
 		var c = 0;
 
 		if ( isNaN(v) ) return 0;
 
-		if (v >= this.state.paymentTotal)
+		var total = this.state.paymentTotal - this.state.childrensDiscount;
+
+		if (v >= total )
 		{
-			c = v - this.state.paymentTotal;
+			c = v - ( this.state.paymentTotal - this.state.childrensDiscount );
 			document.getElementById('print').focus();
 		}
+		else c = '-';
 
-		this.setState({ cash: v, charge: c });
+		this.setState({ cash: v, charge: c.toCurrencyString() });
 	},
 
 	onChildrens: function ()
@@ -89,9 +94,8 @@ var MovieTickets = React.createClass ({
 		else
 		{
 			//todo
-			this.paymentDiscount('children', n);
-
 			this.setState ({ childrens: n });
+			this.paymentDiscount('children', n);
 		}
 	},
 
@@ -113,9 +117,9 @@ var MovieTickets = React.createClass ({
 		}
 	},
 
-	onSeatSelect: function (n,t) { // n = seatID , t = type = VIP / NORMAL
+	onSeatSelect: function (n,t) { // n = seatID , t = type = VIP / STANDARD
 
-		this.setState ({ cash: 0, charge: 0 });
+		this.setState ({ cash: 0, charge: '-', childrens: 0, students: 0, childrensDiscount: 0, studentsDiscount: 0 });
 
 		if (!this.state.seatsSelected[n])
 		{
@@ -194,7 +198,7 @@ var MovieTickets = React.createClass ({
 	getInitialState: function () {
 		return {
 			seatsSelected: {}, seatsPaid: {},
-			childrens: 0, students: 0, paymentTotal: 0, cash: 0, charge: 0,
+			childrens: 0, students: 0, paymentTotal: 0, cash: 0, charge: '-',
 			childrensDiscount: 0, studentsDiscount: 0,
 			_confirmAllow: false };
 	},
@@ -234,9 +238,9 @@ var MovieTickets = React.createClass ({
 							<span style={{marginRight:6}}>MEMBER</span><input type="text" value={null} style={{width:50,textAlign:'center',fontWeight:'bold'}} />
 						</div>
 						<div style={{textAlign:'center',marginTop:12,marginBottom:24}}>
-							<span style={{marginRight:6}}>TOTAL</span><input type="text" value={parseInt(this.state.paymentTotal).toCurrencyString()} style={{width:100,fontSize:'24px !important',color:'#D50000'}} />
+							<span style={{marginRight:6}}>TOTAL</span><input type="text" value={(parseInt(this.state.paymentTotal)-this.state.childrensDiscount).toCurrencyString()} style={{width:100,fontSize:'24px !important',color:'#D50000'}} />
 							<span style={{marginLeft:6,marginRight:6}}>CASH</span><input type="text" value={this.state.cash} onChange={this.onCash} style={{width:100,fontSize:'24px !important'}} />
-							<span style={{marginLeft:6,marginRight:6}}>CHANGE</span><input type="text" value={this.state.charge.toCurrencyString()} style={{width:100,fontSize:'24px !important',color:'#4CAF50'}} />
+							<span style={{marginLeft:6,marginRight:6}}>CHANGE</span><input type="text" value={this.state.charge} style={{width:100,fontSize:'24px !important',color:'#4CAF50'}} />
 						</div>
 						<div style={{textAlign:'center'}}>
 							<button onClick={this.seatsConfirm} disabled={this.state._confirmAllow ? null : 'disabled'} style={{marginRight:12}}>CONFIRM</button>

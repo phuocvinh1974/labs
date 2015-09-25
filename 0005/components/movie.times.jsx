@@ -91,6 +91,12 @@ var MovieTimes = React.createClass ({
 		}.bind (this));
 	},
 
+	componentWillReceiveProps: function (nextProps) {
+		this.createShowtimes (nextProps.current, function () {
+			this.forceUpdate ();
+		}.bind (this));
+	},
+
 	getInitialState: function () {
 		return { Schedules: {}, Index: {}, Showtimes: {} }
 	},
