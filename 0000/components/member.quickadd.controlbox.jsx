@@ -34,7 +34,7 @@ var MemberQuickAddControlBox = React.createClass({
 				<div>Add New Member</div>
 				<div><input type="text" valueLink={this.linkState('firstName')} placeholder="First Name" /></div>
 				<div style={{marginTop:2}}><input type="text" valueLink={this.linkState('lastName')} placeholder="Last Name" /></div>
-				<div style={{marginTop:2}}><input type="text" valueLink={this.linkState('mail')} placeholder="Email" /></div>
+				<div style={{marginTop:2}}><input type="text" valueLink={this.linkState('email')} placeholder="Email" /></div>
 				<div style={{marginTop:2}}><input type="text" valueLink={this.linkState('telephone')} placeholder="Telephone" /></div>
 				<div style={{marginTop:2}}><input type="text" valueLink={this.linkState('mobilePhone')} placeholder="MobilePhone" /></div>
 				<button onClick={this.addNewMember} style={{marginTop:2}}>ADD</button>
