@@ -24,7 +24,6 @@
 		<div id="main-menu">
 			<ul>
 				<li id="mnu-home">CINEMAN</li>
-				<li id="mnu-tickets">TICKETS</li>
 				<li id="mnu-price">PRICE LIST</li>
 				<li id="mnu-members">MEMBERS</li>
 				<li id="mnu-movieslist">MOVIES LIST</li>

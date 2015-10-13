@@ -8,6 +8,9 @@
 		<script src="js/jquery-2.1.3.min.js"></script>
         <script src="js/react-with-addons.min.js"></script>
         <script src="js/JSXTransformer.js"></script>
+
+        <!--<script src="js/velocity.min.js"></script>-->
+
 		<script src="js/proto-helper.js"></script>
 	</head>
 	<body>

@@ -33,13 +33,13 @@ var App = React.createClass({
 
 	onTimeSelect: function (t) {
 
-		this.state.timeSelected = t;
+		this.state.showtime = t;
 
 		this.setState({ showLayout: true });
 	},
 
 	closeTicketLayout: function () {
-		this.setState({ showLayout: false, timeSelected: null });
+		this.setState({showLayout:false,showtime:null});
 	},
 
 	logout: function () {
@@ -47,11 +47,10 @@ var App = React.createClass({
 	},
 
 	getInitialState: function () {
-		// dateSelected: new Date().Today() + 'T00:00:00.000Z',
 		return {
 			granted: null, profile: null,
 			dateSelected: null,
-			Pricing: null, timeSelected: null,
+			Pricing: null, showtime: null,
 			showLayout: false }
 	},
 
@@ -67,7 +66,7 @@ var App = React.createClass({
 						<MovieDatePicker current={this.state.dateSelected} onDateSelect={this.onDateSelect} />
 					</div>
 					<MovieTimes current={this.state.dateSelected} onTimeSelect={this.onTimeSelect} />
-					<MovieTickets onClose={this.closeTicketLayout} show={this.state.showLayout} showtime={this.state.timeSelected} pricing={this.state.Pricing} profile={this.state.profile} />
+					<MovieTickets onClose={this.closeTicketLayout} show={this.state.showLayout} showtime={this.state.showtime} pricing={this.state.Pricing} profile={this.state.profile} />
 				</div>
 			);
 		}

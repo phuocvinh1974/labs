@@ -76,7 +76,7 @@ var MovieTickets = React.createClass ({
 		}
 		else c = '-';
 
-		this.setState({ cash: v, charge: c.toCurrencyString() });
+		this.setState({ cash: v, change: c==='-' ? '-' : c.toCurrencyString() });
 	},
 
 	onChildrens: function ()
@@ -94,8 +94,10 @@ var MovieTickets = React.createClass ({
 		else
 		{
 			//todo
-			this.setState ({ childrens: n });
+			// this.setState ({ childrens: n, change: 0 });
 			this.paymentDiscount('children', n);
+			this.setState ({ childrens: n, change: this.state.change==='-' ? '-' : this.state.cash - this.state.paymentTotal });
+
 		}
 	},
 
@@ -117,9 +119,15 @@ var MovieTickets = React.createClass ({
 		}
 	},
 
+	onMemberId: function () {
+		var v = event.target.value;
+
+		this.setState ({ memberId: v });
+	},
+
 	onSeatSelect: function (n,t) { // n = seatID , t = type = VIP / STANDARD
 
-		this.setState ({ cash: 0, charge: '-', childrens: 0, students: 0, childrensDiscount: 0, studentsDiscount: 0 });
+		this.setState ({ cash: 0, change: '-', childrens: 0, students: 0, childrensDiscount: 0, studentsDiscount: 0 });
 
 		if (!this.state.seatsSelected[n])
 		{
@@ -138,7 +146,9 @@ var MovieTickets = React.createClass ({
 
 		if (!this.state._confirmAllow) return false;
 
-		var data = { infos: this.props.showtime, seats: $.extend(this.state.seatsSelected, this.state.seatsPaid) };
+		var data = {
+			infos: this.props.showtime,
+			seats: $.extend(this.state.seatsSelected, this.state.seatsPaid) };
 
 		$.ajax({
 			type: 'post',
@@ -169,12 +179,20 @@ var MovieTickets = React.createClass ({
 
 	printing: function (sh,p) {
 		
-		if (Object.keys(this.state.seatsSelected).length)
+		if (Object.keys(this.state.seatsSelected).length && this.state.change!=='-')
 		{
 			$.ajax({
 				type: 'post',
 				url: 'modules/tickets/printing.php',
-				data: { post: { showtime: sh, profile: p, seats: this.state.seatsSelected }  },
+				data: { post: {
+					showtime: sh,
+					profile: p,
+					seats: this.state.seatsSelected,
+					childrens: this.state.childrens,
+					students: this.state.students,
+					childrensDiscount: this.state.childrensDiscount,
+					studentsDiscount: this.state.studentsDiscount }
+				},
 				dataType: 'json',
 				success: function (res) {
 
@@ -192,13 +210,13 @@ var MovieTickets = React.createClass ({
 			});
 		}
 		else
-			alert ('nothing to print!')
+			alert ('not meet requirements to print!')
 	},
 
 	getInitialState: function () {
 		return {
 			seatsSelected: {}, seatsPaid: {},
-			childrens: 0, students: 0, paymentTotal: 0, cash: 0, charge: '-',
+			childrens: 0, students: 0, memberId: null, paymentTotal: 0, cash: 0, change: '-',
 			childrensDiscount: 0, studentsDiscount: 0,
 			_confirmAllow: false };
 	},
@@ -232,15 +250,15 @@ var MovieTickets = React.createClass ({
 						</div>
 						<div style={{textAlign:'center',color:'#999',letterSpacing:5,marginTop:24,fontSize:'12px !important'}}>SCREEN</div>
 						<SeatingPlanLayout showtime={this.props.showtime} onSeatSelect={this.onSeatSelect} resSeatsPaid={this.resSeatsPaid} _reload={this.state._reloadLayout} />
-						<div style={{textAlign:'center',marginTop:12}}>
+						<div style={{textAlign:'center',marginTop:18}}>
 							<span style={{marginRight:6}}>CH</span><input type="text" onChange={this.onChildrens} value={this.state.childrens} maxLength="2" style={{width:25,textAlign:'center'}} />
 							<span style={{marginRight:6,marginLeft:6}}>STD</span><input type="text" onChange={this.onStudents} value={this.state.students} maxLength="2" style={{width:25,textAlign:'center',marginRight:6}} />
-							<span style={{marginRight:6}}>MEMBER</span><input type="text" value={null} style={{width:50,textAlign:'center',fontWeight:'bold'}} />
+							<span style={{marginRight:6}}>MEMBER</span><input type="text" value={this.state.memberId} onChange={this.onMemberId} style={{width:50,textAlign:'center',fontWeight:'bold'}} />
 						</div>
 						<div style={{textAlign:'center',marginTop:12,marginBottom:24}}>
 							<span style={{marginRight:6}}>TOTAL</span><input type="text" value={(parseInt(this.state.paymentTotal)-this.state.childrensDiscount).toCurrencyString()} style={{width:100,fontSize:'24px !important',color:'#D50000'}} />
 							<span style={{marginLeft:6,marginRight:6}}>CASH</span><input type="text" value={this.state.cash} onChange={this.onCash} style={{width:100,fontSize:'24px !important'}} />
-							<span style={{marginLeft:6,marginRight:6}}>CHANGE</span><input type="text" value={this.state.charge} style={{width:100,fontSize:'24px !important',color:'#4CAF50'}} />
+							<span style={{marginLeft:6,marginRight:6}}>CHANGE</span><input type="text" value={this.state.change} style={{width:100,fontSize:'24px !important',color:'#4CAF50'}} />
 						</div>
 						<div style={{textAlign:'center'}}>
 							<button onClick={this.seatsConfirm} disabled={this.state._confirmAllow ? null : 'disabled'} style={{marginRight:12}}>CONFIRM</button>
